@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import WaIcon from '../../components/WaIcon.astro';
+import { photos } from '../../data/photos';
+import { services, site, waLink } from '../../data/site';
+
+export function getStaticPaths() {
+  return services.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+const { s: svc } = Astro.props;
+const wides = [
+  { key: 'bmw-fachada', cap: 'BMW diante da fachada da V8, em Tremembé.' },
+  { key: 'cayenne', cap: 'Porsche Cayenne no pátio da V8.' },
+  { key: 'fila-carros', cap: 'O muro da V8 com os serviços pintados.' },
+] as const;
+const wide = wides[services.findIndex((x) => x.slug === svc.slug) % 3];
+const others = services.filter((x) => x.slug !== svc.slug);
+const text = `Olá! Vi o site da V8 Estética Automotiva e quero um orçamento de ${svc.name.toLowerCase()}.`;
+const url = `${site.url}/servicos/${svc.slug}/`;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: svc.name,
+    serviceType: svc.name,
+    description: svc.short,
+    areaServed: 'Tremembé, São Paulo',
+    provider: { '@type': 'AutoWash', '@id': `${site.url}/#negocio`, name: site.name },
+    url,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: site.url + '/' },
+      { '@type': 'ListItem', position: 2, name: svc.name, item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: svc.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={svc.title} description={svc.description} path={`/servicos/${svc.slug}/`} jsonLd={jsonLd}>
+  <section class="page-hero" aria-labelledby="h1">
+   <div class="ph">
+    <div class="ph-t">
+      <h1 id="h1" class="display">{svc.headline}</h1>
+      <p class="lead" data-r>{svc.lead}</p>
+      <div class="cta-row" data-r style="--i:1">
+        <a class="btn" href={waLink(text)} data-ev="click_whatsapp" rel="noopener"><WaIcon />Pedir orçamento</a>
+        <a class="btn btn-quiet" href="/#servicos">Outros serviços</a>
+      </div>
+      <p class="status" data-status aria-live="polite" data-open="false" style="margin-top:20px"><i></i><span>Ter–Sáb 8h–17h · Dom 8h–12h</span></p>
+    </div>
+    <figure data-r style="--i:2"><Image src={photos[svc.photo].src} alt={photos[svc.photo].alt} width={640} loading="eager" /></figure>
+   </div>
+  </section>
+
+  <section class="section wrap field-surface" aria-labelledby="h-que">
+    <div class="split">
+      <figure class="col-a photo-wide" data-r>
+        <Image src={photos[wide.key].src} alt={photos[wide.key].alt} width={800} loading="eager" />
+      </figure>
+      <div class="col-b prose" data-r style="--i:1">
+        <h2 id="h-que" class="head" style="margin-bottom:32px">Como funciona.</h2>
+        {svc.what.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="h-quem">
+    <div class="split">
+      <h2 id="h-quem" class="head col-a" data-r>Para quem é.</h2>
+      <ul class="checks col-b lead" data-r style="--i:1">
+        {svc.forWho.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section wrap field-silver" aria-labelledby="h-passos">
+    <div class="split">
+      <h2 id="h-passos" class="head col-a" data-r>Do contato à entrega.</h2>
+      <ol class="col-b lead steps" data-r style="--i:1">
+        {svc.steps.map((p) => <li style="margin-left:0">{p}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="h-faq">
+    <div class="split">
+      <h2 id="h-faq" class="head col-full" style="max-width:16ch" data-r>Dúvidas comuns.</h2>
+      <div class="faq-list" data-r>
+        {svc.faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap field-surface" aria-labelledby="h-outros">
+    <div class="split">
+      <h2 id="h-outros" class="head col-a" data-r>Outros serviços.</h2>
+      <nav class="thumbs col-b" aria-label="Outros serviços" data-r style="--i:1">
+        {others.map((o) => <a href={`/servicos/${o.slug}/`}><span>{o.name}</span><div class="im"><Image src={photos[o.photo].src} alt="" width={440} loading="eager" /></div></a>)}
+      </nav>
+    </div>
+  </section>
+</Base>
