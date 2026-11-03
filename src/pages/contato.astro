@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import WaIcon from '../components/WaIcon.astro';
+import { Image } from 'astro:assets';
+import { photos } from '../data/photos';
+import { site, hours, services, waLink, defaultWaText, routeUrl } from '../data/site';
+---
+<Base title="Como chegar e horários" description="V8 Estética Automotiva: R. Francisco José Lopes, 22, Tremembé, São Paulo. Aberto de terça a domingo. Telefone (11) 2373-8455." path="/contato/">
+  <section class="page-hero" aria-labelledby="h1">
+   <div class="ph">
+    <div class="ph-t">
+      <h1 id="h1" class="display">Venha até a V8.</h1>
+      <address data-r>{site.address.street}<br />{site.address.district}, {site.address.city} – {site.address.state}</address>
+      <div class="cta-row" data-r style="--i:1;margin-top:32px">
+        <a class="btn" href={routeUrl} data-ev="click_route" target="_blank" rel="noopener">Abrir rota no mapa</a>
+        <a class="btn btn-quiet" href={waLink(defaultWaText)} data-ev="click_whatsapp" rel="noopener"><WaIcon />WhatsApp</a>
+      </div>
+    </div>
+    <figure data-r style="--i:2"><Image src={photos['bmw-fachada'].src} alt={photos['bmw-fachada'].alt} width={640} loading="eager" /></figure>
+   </div>
+  </section>
+
+  <section class="section wrap field-surface" aria-labelledby="h-info">
+    <div class="contact">
+      <div class="c1 stack" data-r>
+        <h2 id="h-info" class="head" style="max-width:12ch">Como chegar.</h2>
+        <address>{site.address.street}<br />{site.address.district}, {site.address.city} – {site.address.state}<br />{site.address.zip}</address>
+        <p>Atendemos de terça a sábado, das 8h às 17h, e aos domingos, das 8h ao meio-dia. Às segundas a V8 fica fechada.</p>
+        <p><a class="link" href={`tel:${site.phoneTel}`} data-ev="click_call">{site.phoneDisplay}</a></p>
+        <p><a class="link" href={site.instagram} target="_blank" rel="noopener">Instagram {site.instagramHandle}</a></p>
+      </div>
+      <div class="c3b" data-r style="--i:1">
+        <h2 class="lead" style="font-weight:600">Horários</h2>
+        <table class="hours" data-hours style="margin-top:12px">
+          <caption class="sr-only">Horário de funcionamento</caption>
+          <tbody>
+            {hours.map((h) => (
+              <tr data-dows={h.dows.join(',')}><th scope="row">{h.days}</th><td>{h.open ? `${h.open.slice(0,2)}h às ${h.close!.slice(0,2)}h` : 'Fechado'}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="status" data-status aria-live="polite" data-open="false" style="margin-top:16px"><i></i><span>Ter–Sáb 8h–17h · Dom 8h–12h</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="h-fachada">
+    <div class="split">
+      <h2 id="h-fachada" class="head col-a" data-r>Procure o muro com o V8.</h2>
+      <figure class="col-b photo-wide" data-r style="--i:1">
+        <Image src={photos['fila-carros'].src} alt={photos['fila-carros'].alt} width={900} loading="eager" />
+        <figcaption class="cap">Carros alinhados diante do muro da V8 Lava Rápido, em Tremembé.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section wrap field-surface" aria-labelledby="h-svc">
+    <div class="split">
+      <h2 id="h-svc" class="head col-a" data-r>O que fazemos aqui.</h2>
+      <nav class="thumbs col-b" aria-label="Serviços" data-r style="--i:1">
+        {services.map((o) => <a href={`/servicos/${o.slug}/`}><span>{o.name}</span><div class="im"><Image src={photos[o.photo].src} alt="" width={440} loading="eager" /></div></a>)}
+      </nav>
+    </div>
+  </section>
+</Base>

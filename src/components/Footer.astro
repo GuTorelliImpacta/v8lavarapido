@@ -1,0 +1,22 @@
+---
+import { site, addressLine, waLink, defaultWaText } from '../data/site';
+import WaIcon from './WaIcon.astro';
+---
+<footer class="foot">
+  <div class="foot-top">
+    <div class="f1" data-r>
+      <p class="head" style="max-width:14ch">Seu carro merece esse brilho.</p>
+      <p style="margin-top:32px"><a class="btn" href={waLink(defaultWaText)} data-ev="click_whatsapp" rel="noopener"><WaIcon />Chamar no WhatsApp</a></p>
+    </div>
+    <ul class="f2" data-r style="--i:1">
+      <li><a href={`tel:${site.phoneTel}`} data-ev="click_call">{site.phoneDisplay}</a></li>
+      <li><a href={site.instagram} rel="noopener" target="_blank">Instagram {site.instagramHandle}</a></li>
+      <li><a href="/contato/">Como chegar</a></li>
+    </ul>
+  </div>
+  <div class="foot-legal">
+    <span>{site.name} · {addressLine}</span>
+    <span><a href="/privacidade/">Privacidade</a></span>
+  </div>
+  <span class="foot-mark" aria-hidden="true">V8 Estética</span>
+</footer>

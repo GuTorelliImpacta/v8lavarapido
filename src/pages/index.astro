@@ -1,0 +1,164 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import WaIcon from '../components/WaIcon.astro';
+import { photos } from '../data/photos';
+import { site, hours, addressLine, services, faqHome, waLink, defaultWaText, routeUrl, mapsUrl } from '../data/site';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AutoWash',
+    '@id': `${site.url}/#negocio`,
+    name: site.name,
+    alternateName: site.legalShort,
+    url: site.url,
+    image: `${site.url}/og.jpg`,
+    telephone: site.phoneTel,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.address.street,
+      addressLocality: site.address.city,
+      addressRegion: site.address.state,
+      postalCode: site.address.zip,
+      addressCountry: 'BR',
+    },
+    openingHoursSpecification: [
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:00', closes: '17:00' },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Sunday', opens: '08:00', closes: '12:00' },
+    ],
+    sameAs: [site.instagram],
+    areaServed: 'Tremembé, São Paulo',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqHome.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+
+const rowClass = ['a', 'b', 'c', 'b', 'a'];
+const pickerServices = ['Lavagem', 'Polimento', 'Vitrificação', 'Martelinho', 'Higienização'];
+---
+<Base
+  title="V8 Estética Automotiva | Lava rápido em Tremembé, São Paulo"
+  description="Lavagem, polimento, vitrificação, martelinho e higienização em Tremembé, zona norte de São Paulo. Chame a V8 no WhatsApp."
+  path="/"
+  jsonLd={jsonLd}
+>
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="h1">
+    <h1 id="h1" class="display">
+      <span class="line">Seu carro com
+        <span class="slot" role="img" aria-label="Detalhe do farol e da pintura branca de uma BMW"><Image src={photos['farol-bmw'].src} alt="" width={900} loading="eager" /></span></span>
+      <span class="line">brilho de espelho.</span>
+    </h1>
+    <div class="hero-foot">
+      <p class="lead" data-r>Lavagem, polimento, vitrificação, martelinho e higienização em Tremembé, zona norte de São Paulo.</p>
+      <span></span>
+      <div class="stack" data-r style="--i:1">
+        <div class="cta-row">
+          <a class="btn" href={waLink(defaultWaText)} data-ev="click_whatsapp" rel="noopener"><WaIcon />Chamar no WhatsApp</a>
+          <a class="btn btn-quiet" href="#servicos">Ver serviços</a>
+        </div>
+        <p class="status" data-status aria-live="polite" data-open="false"><i></i><span>Ter–Sáb 8h–17h · Dom 8h–12h</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos" class="section field-surface wrap" aria-labelledby="h-servicos" style="padding-top:0">
+    <div class="svc-head split">
+      <h2 id="h-servicos" class="head statement col-c" data-r>Cada detalhe do seu carro.</h2>
+    </div>
+    {services.map((s, i) => (
+      <article class={`svc-row ${rowClass[i]}`}>
+        <div class="txt" data-r>
+          <h3><a href={`/servicos/${s.slug}/`}>{s.name}</a></h3>
+          <p>{s.short}</p>
+          <a class="more link" href={`/servicos/${s.slug}/`}>Saiba mais<span class="sr-only"> sobre {s.name.toLowerCase()}</span></a>
+        </div>
+        <figure data-r style="--i:1">
+          <Image src={photos[s.photo].src} alt={photos[s.photo].alt} width={i % 2 ? 640 : 480} loading="lazy" />
+        </figure>
+      </article>
+    ))}
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="section field-silver wrap" aria-labelledby="h-como">
+    <h2 id="h-como" class="head" style="max-width:16ch" data-r>Do primeiro contato ao brilho.</h2>
+    <ol class="steps" style="margin-top:clamp(40px,6vw,96px)">
+      <li data-r><span class="line">Primeiro você chama.</span><p>Pelo WhatsApp ou aqui no endereço, de terça a domingo.</p></li>
+      <li data-r><span class="line">Depois avaliamos.</span><p>Olhamos o estado da pintura e do interior, com você.</p></li>
+      <li data-r><span class="line">Você aprova o valor.</span><p>Combinamos serviço, prazo e preço antes de começar.</p></li>
+      <li data-r><span class="line">E retira com brilho.</span><p>Seu carro pronto, do jeito que você viu na fachada.</p></li>
+    </ol>
+  </section>
+
+  <!-- GALERIA -->
+  <section id="galeria" class="section wrap" aria-labelledby="h-gal">
+    <h2 id="h-gal" class="head" style="max-width:16ch" data-r>Carros que passam por aqui.</h2>
+    <div class="gal">
+      <figure class="g1" data-r><Image src={photos['bmw-fachada'].src} alt={photos['bmw-fachada'].alt} width={900} loading="lazy" /><figcaption class="cap">BMW diante da fachada da V8, em Tremembé.</figcaption></figure>
+      <figure class="g2" data-r style="--i:1"><Image src={photos['cayenne'].src} alt={photos['cayenne'].alt} width={700} loading="lazy" /><figcaption class="cap">Porsche Cayenne no pátio.</figcaption></figure>
+      <figure class="g3" data-r style="--i:2"><Image src={photos['fila-carros'].src} alt={photos['fila-carros'].alt} width={700} loading="lazy" /><figcaption class="cap">O muro com os serviços: ducha, lavagem, polimento, martelinho, vitrificação, higienização.</figcaption></figure>
+    </div>
+    <p style="margin-top:32px" data-r>Veja mais no Instagram: <a class="link" href={site.instagram} target="_blank" rel="noopener">{site.instagramHandle}</a></p>
+  </section>
+
+  <!-- NÚMEROS REAIS -->
+  <section class="section field-surface wrap" aria-labelledby="h-num">
+    <div class="split">
+      <h2 id="h-num" class="head col-a" data-r>V8 em números.</h2>
+      <dl class="ledger col-b" data-r>
+        <div><dt>{site.rating.value}</dt><dd>nota no {site.rating.source} Maps, com {site.rating.count} avaliações.</dd></div>
+        <div><dt>6</dt><dd>dias por semana de atendimento, de terça a domingo.</dd></div>
+        <div><dt>9</dt><dd>horas de atendimento por dia, de terça a sábado.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ORÇAMENTO (coisa viva) + COMO CHEGAR -->
+  <section id="como-chegar" class="section wrap" aria-labelledby="h-orc">
+    <div class="contact">
+      <div class="c1" data-r>
+        <h2 id="h-orc" class="head" style="max-width:14ch">Qual serviço você quer?</h2>
+        <div class="picker" style="margin-top:32px" data-picker data-number={site.whatsapp} data-target="#wa-pick" role="group" aria-label="Escolha o serviço">
+          {pickerServices.map((s) => <button type="button" data-service={s} aria-pressed="false">{s}</button>)}
+        </div>
+        <p style="margin-top:24px"><a id="wa-pick" class="btn" href={waLink(defaultWaText)} data-ev="click_whatsapp" rel="noopener"><WaIcon /><span data-label>Chamar no WhatsApp</span></a></p>
+      </div>
+      <div class="c2 stack" data-r style="--i:1">
+        <h3 class="lead" style="font-weight:600">Onde estamos</h3>
+        <address>{site.address.street}<br />{site.address.district}, {site.address.city} – {site.address.state}<br />{site.address.zip}</address>
+        <p><a class="link" href={routeUrl} data-ev="click_route" rel="noopener" target="_blank">Abrir rota no mapa</a></p>
+        <p><a class="link" href={`tel:${site.phoneTel}`} data-ev="click_call">{site.phoneDisplay}</a></p>
+      </div>
+      <div class="c3" data-r style="--i:2">
+        <h3 class="lead" style="font-weight:600">Horários</h3>
+        <table class="hours" data-hours style="margin-top:12px">
+          <caption class="sr-only">Horário de funcionamento</caption>
+          <tbody>
+            {hours.map((h) => (
+              <tr data-dows={h.dows.join(',')}><th scope="row">{h.days}</th><td>{h.open ? `${h.open.slice(0,2)}h às ${h.close!.slice(0,2)}h` : 'Fechado'}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="status" data-status aria-live="polite" data-open="false" style="margin-top:16px"><i></i><span>Ter–Sáb 8h–17h · Dom 8h–12h</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section field-surface wrap" aria-labelledby="h-faq">
+    <div class="split">
+      <h2 id="h-faq" class="head col-full" style="max-width:16ch" data-r>Perguntas frequentes.</h2>
+      <div class="faq-list" data-r>
+        {faqHome.map((f) => (
+          <details><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

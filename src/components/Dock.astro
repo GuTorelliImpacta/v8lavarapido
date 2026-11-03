@@ -1,0 +1,9 @@
+---
+import WaIcon from './WaIcon.astro';
+import { waLink, defaultWaText, site, routeUrl } from '../data/site';
+---
+<div class="dock" role="group" aria-label="Contato rápido">
+  <a class="btn" href={waLink(defaultWaText)} data-ev="click_whatsapp" rel="noopener"><WaIcon />WhatsApp</a>
+  <a class="btn btn-quiet" href={`tel:${site.phoneTel}`} data-ev="click_call" aria-label="Ligar para a V8">Ligar</a>
+  <a class="btn btn-quiet" href={routeUrl} data-ev="click_route" rel="noopener" aria-label="Abrir rota no mapa">Rota</a>
+</div>

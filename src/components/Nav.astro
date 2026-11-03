@@ -1,0 +1,23 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+import WaIcon from './WaIcon.astro';
+import { waLink, defaultWaText } from '../data/site';
+---
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="/" aria-label="V8 Estética Automotiva, página inicial">
+      <Image src={logo} alt="" width={48} height={48} loading="eager" />
+      <span>V8 Estética<br />Automotiva</span>
+    </a>
+    <nav class="nav-links" aria-label="Principal">
+      <a href="/#servicos">Serviços</a>
+      <a href="/#galeria">Galeria</a>
+      <a href="/#como-chegar">Como chegar</a>
+    </nav>
+    <a class="btn" href={waLink(defaultWaText)} data-ev="click_whatsapp" rel="noopener">
+      <WaIcon /><span class="long">Chamar no WhatsApp</span><span class="short">WhatsApp</span>
+    </a>
+  </div>
+</header>

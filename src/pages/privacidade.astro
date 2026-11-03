@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base title="Política de privacidade" description="Como o site da V8 Estética Automotiva trata dados pessoais." path="/privacidade/" noindex>
+  <section class="page-hero" aria-labelledby="h1">
+    <h1 id="h1" class="display" style="font-size:clamp(2.25rem,1rem + 5vw,5.5rem)">Privacidade.</h1>
+  </section>
+  <section class="wrap section legal">
+    <p>Este site é informativo. Ele não tem formulário, não cria conta e não grava cookies de rastreamento.</p>
+    <h2>Dados que coletamos</h2>
+    <p>Nenhum dado pessoal é coletado ou enviado a servidores por este site. Ao tocar em um botão de WhatsApp, você é levado ao aplicativo, onde a conversa é regida pela política do WhatsApp.</p>
+    <h2>Estatísticas de acesso</h2>
+    <p>No momento o site não usa ferramentas de análise. Se passarmos a usar, será somente com o seu consentimento, e esta página será atualizada.</p>
+    <h2>Links externos</h2>
+    <p>O site tem links para o WhatsApp, o Instagram ({site.instagramHandle}) e o Google Maps. Cada serviço trata seus dados conforme a própria política.</p>
+    <h2>Fale com a gente</h2>
+    <p>Dúvidas sobre dados pessoais: {site.phoneDisplay}. Responsável: {site.name}, {site.address.street}, {site.address.district}, {site.address.city} – {site.address.state}.</p>
+    <p class="muted small" style="margin-top:32px">Texto base, sujeito à revisão do responsável legal do negócio.</p>
+  </section>
+</Base>
